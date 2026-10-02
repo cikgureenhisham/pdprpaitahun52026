@@ -1,1 +1,655 @@
-index.html
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Game Adab Berkomunikasi - Pendidikan Islam Tahun 5 KSSR</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts Fredoka & Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- MediaPipe Hands CDN untuk Pengesanan Jari Kanan Kamera Sebenar -->
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
+
+    <style>
+        body { font-family: 'Inter', sans-serif; touch-action: manipulation; }
+        .font-cute { font-family: 'Fredoka', cursive, sans-serif; }
+        .mirror { transform: scaleX(-1); }
+        .gaming-glow { box-shadow: 0 0 30px rgba(168, 85, 247, 0.4); }
+        .gaming-border { border: 3px solid #c084fc; }
+        .arcade-btn {
+            background: linear-gradient(135deg, #a855f7 0%, #7e22ce 100%);
+            box-shadow: 0 6px 0 #581c87, 0 10px 20px rgba(0,0,0,0.3);
+            transition: all 0.1s ease;
+        }
+        .arcade-btn:active {
+            transform: translateY(4px);
+            box-shadow: 0 2px 0 #581c87, 0 5px 10px rgba(0,0,0,0.3);
+        }
+        /* Style khas apabila kotak pilihan menyala akibat jari betul-betul masuk ke dalamnya */
+        .btn-pilihan.active-target {
+            background: rgba(147, 51, 234, 0.95) !important;
+            border-color: #f3e8ff !important;
+            box-shadow: 0 0 30px rgba(216, 180, 254, 0.9);
+            transform: scale(1.02);
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-slate-950 via-purple-950 to-indigo-950 min-h-screen flex flex-col items-center justify-center p-2 md:p-4 text-gray-100 overflow-x-hidden">
+
+    <div class="max-w-5xl w-full bg-slate-900/95 backdrop-blur-md rounded-2xl md:rounded-3xl gaming-glow overflow-visible gaming-border relative my-auto">
+        
+        <!-- Header Banner Arcade Purple -->
+        <div class="bg-gradient-to-r from-purple-700 via-fuchsia-700 to-indigo-700 text-white p-4 md:p-6 text-center relative overflow-hidden border-b-4 border-purple-400 rounded-t-2xl md:rounded-t-3xl">
+            <div class="absolute -right-6 -bottom-6 text-8xl opacity-10">🎮</div>
+            <div class="absolute -left-6 -top-6 text-8xl opacity-10">✨</div>
+            <span class="bg-purple-600/90 text-purple-100 text-[10px] md:text-xs px-3 md:px-4 py-1.5 rounded-full uppercase tracking-widest font-extrabold shadow-lg border border-purple-300">💜 ARCADE KSSR TAHUN 5</span>
+            <h1 class="text-2xl md:text-4xl font-cute font-bold mt-2 tracking-wide drop-shadow-md">Adab Berkomunikasi 🌟</h1>
+            <p class="text-purple-200 text-xs md:text-sm mt-1 font-medium">Pengembaraan Jari Kanan Udara • Pendidikan Islam</p>
+        </div>
+
+        <!-- STAGE 1: LOGIN / PENDAFTARAN MURID -->
+        <div id="section-login" class="p-5 md:p-8 space-y-5 max-w-xl mx-auto">
+            <div class="bg-purple-950/50 border-2 border-purple-500/50 p-4 md:p-5 rounded-2xl text-purple-100 text-xs md:text-sm shadow-inner">
+                <p class="font-bold font-cute text-base md:text-lg text-purple-300">✨ Mula Pengembaraan Ilmu!</p>
+                <p class="mt-1 text-slate-300">Sila masukkan nama penuh dan kelas anda untuk menyertai arena cabaran kuiz interaktif hari ini.</p>
+            </div>
+            
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-purple-300 font-cute font-semibold mb-1.5 text-xs md:text-sm">Nama Penuh Murid:</label>
+                    <input type="text" id="input-nama" placeholder="Contoh: Muhammad Amirul bin Zulkifli" class="w-full px-4 py-3 md:py-3.5 rounded-2xl bg-slate-800 border-2 border-purple-500/40 focus:ring-4 focus:ring-purple-400/30 focus:border-purple-400 focus:outline-none text-white placeholder-slate-500 transition text-sm font-medium">
+                </div>
+
+                <div>
+                    <label class="block text-purple-300 font-cute font-semibold mb-1.5 text-xs md:text-sm">Kelas:</label>
+                    <input type="text" id="input-kelas" placeholder="Contoh: 5 Al-Biruni" class="w-full px-4 py-3 md:py-3.5 rounded-2xl bg-slate-800 border-2 border-purple-500/40 focus:ring-4 focus:ring-purple-400/30 focus:border-purple-400 focus:outline-none text-white placeholder-slate-500 transition text-sm font-medium">
+                </div>
+            </div>
+
+            <button onclick="mulaPendaftaran()" class="w-full arcade-btn text-white font-cute text-base md:text-lg font-bold py-3.5 md:py-4 rounded-2xl cursor-pointer">
+                Seterusnya: Rujukan Buku Teks (ms 175-176) 📚
+            </button>
+        </div>
+
+        <!-- STAGE 2: NOTA ISI KANDUNGAN BUKU TEKS TAHUN 5 (Muka Surat 175-176) -->
+        <div id="section-nota" class="p-5 md:p-8 space-y-4 md:space-y-5 hidden max-w-2xl mx-auto">
+            <h2 class="text-xl md:text-2xl font-cute font-bold text-purple-300 border-b border-slate-700 pb-3 flex items-center justify-between">
+                <span>📖 Rujukan Buku Teks (ms 175-176)</span>
+                <span class="text-[10px] md:text-xs bg-purple-500/20 border border-purple-400 text-purple-300 px-3 py-1 rounded-full font-sans font-bold">KSSR</span>
+            </h2>
+            
+            <div class="space-y-3 text-xs md:text-sm text-slate-200 max-h-[320px] md:max-h-[380px] overflow-y-auto pr-1">
+                <div class="bg-slate-800/80 p-3.5 md:p-4 rounded-2xl border border-purple-500/30 shadow-md">
+                    <span class="font-bold text-purple-400 font-cute text-sm md:text-base">1. Pengertian Komunikasi:</span>
+                    <p class="mt-1 text-slate-300">Perbuatan mengadakan perhubungan, sama ada secara langsung atau melalui perantaraan (seperti media sosial).</p>
+                </div>
+                <div class="bg-slate-800/80 p-3.5 md:p-4 rounded-2xl border border-fuchsia-500/30 shadow-md">
+                    <span class="font-bold text-fuchsia-400 font-cute text-sm md:text-base">2. Dalil Riwayat al-Bukhari & Maksud:</span>
+                    <p class="italic mt-1 font-semibold text-fuchsia-200">"Al-Muslimu man salimal-muslimu min lisanihi wa yadihi"</p>
+                    <p class="text-xs text-slate-300 mt-1"><b>Maksud:</b> Muslim itu ialah yang memberikan kesejahteraan kepada orang muslim yang lain dengan lidah dan tangannya.</p>
+                </div>
+                <div class="bg-slate-800/80 p-3.5 md:p-4 rounded-2xl border border-pink-500/30 shadow-md">
+                    <span class="font-bold text-pink-400 font-cute text-sm md:text-base">3. Hukum Beradab Berkomunikasi:</span>
+                    <p class="mt-1 text-slate-300"><b>HARUS</b>, dengan syarat menjaga batas-batas syarak (tidak berbohong, mencaci, memfitnah, bergurau berlebihan).</p>
+                </div>
+                <div class="bg-slate-800/80 p-3.5 md:p-4 rounded-2xl border border-indigo-500/30 shadow-md">
+                    <span class="font-bold text-indigo-400 font-cute text-sm md:text-base">4. Adab Berkomunikasi & Kepentingan:</span>
+                    <p class="mt-1 text-slate-300">Memulakan dengan salam, memilih kata yang baik, sopan, mendengar ketika orang lain bercakap, memastikan kesahihan berita, mendapat pahala, merapatkan silaturrahim.</p>
+                </div>
+            </div>
+
+            <button onclick="mulaKameraDanGame()" class="w-full arcade-btn text-white font-cute text-base md:text-lg font-bold py-3.5 md:py-4 rounded-2xl cursor-pointer">
+                Buka Kamera & Mula Cabaran 15 Soalan 📷✨
+            </button>
+        </div>
+
+        <!-- STAGE 3: GAME KELUARAN KAMERA (KOTAK KAMERA DI TENGAH UTAMA) -->
+        <div id="section-game" class="p-3 md:p-6 hidden relative overflow-visible">
+            
+            <!-- SVG Canvas untuk Garisan Laser Tepat dari Kursor ke Kotak Pilihan -->
+            <svg id="laser-svg" class="absolute inset-0 w-full h-full pointer-events-none z-[130] overflow-visible">
+                <defs>
+                    <linearGradient id="laserGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" stop-color="#c084fc" />
+                        <stop offset="100%" stop-color="#f43f5e" />
+                    </linearGradient>
+                </defs>
+                <line id="laser-line" x1="0" y1="0" x2="0" y2="0" stroke="url(#laserGrad)" stroke-width="4" stroke-dasharray="6,4" class="animate-pulse" />
+            </svg>
+
+            <!-- Kursor Jari Maya Interaktif (Kekal Sentiasa Kelihatan di Lapisan Paling Hadapan) -->
+            <div id="air-cursor" class="absolute w-14 h-14 md:w-16 md:h-16 bg-purple-700/95 border-2 border-white rounded-full shadow-2xl pointer-events-none flex flex-col items-center justify-center text-xs text-white font-bold z-[140] transition-none" style="left: 50%; top: 50%; transform: translate(-50%, -50%);">
+                <span class="text-lg md:text-xl">👉</span>
+                <span id="cursor-progress" class="text-[9px] md:text-[10px] bg-black/80 px-1.5 rounded mt-0.5 text-purple-300">0%</span>
+            </div>
+
+            <!-- Info Murid & Skor -->
+            <div class="flex justify-between items-center bg-slate-800 border border-purple-500/30 px-3 md:px-4 py-2 rounded-xl md:rounded-2xl text-xs mb-3 md:mb-4">
+                <div><b>Murid:</b> <span id="lbl-nama" class="text-purple-400 font-semibold">-</span></div>
+                <div><b>Skor:</b> <span id="lbl-skor" class="font-bold text-purple-400 text-sm md:text-base">0</span> / <span id="lbl-jumlah-soalan">15</span></div>
+            </div>
+
+            <!-- Layout 3 Kolum Utama dengan Kamera di Tengah & Sesuai untuk Mobile & Tablet -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-3 md:gap-4 items-stretch relative overflow-visible">
+                
+                <!-- KOLUM KIRI: Pilihan Jawapan -->
+                <div class="order-2 lg:order-1 bg-slate-800/90 border-2 border-purple-500/40 p-3.5 md:p-4 rounded-2xl flex flex-col justify-between space-y-3 relative z-[110] overflow-visible">
+                    <div>
+                        <span class="text-[11px] md:text-xs font-bold text-purple-400 font-cute uppercase tracking-wide block mb-1">👈 Pilihan Jawapan</span>
+                        <p class="text-[10px] md:text-[11px] text-slate-400 mb-2">Tarik jari kanan anda ke kiri dan halakan ke kotak pilihan 1, 2 atau 3:</p>
+                    </div>
+                    <div id="pilihan-jawapan" class="space-y-2.5 md:space-y-3 flex-1 flex flex-col justify-center">
+                        <!-- Pilihan dinamis -->
+                    </div>
+                </div>
+
+                <!-- KOLUM TENGAH: Paparan Kamera Live & Penjejak Jari Udara (AI) - POSISI TENGAH UTAMA -->
+                <div id="webcam-container" class="order-1 lg:order-2 relative bg-black rounded-2xl overflow-hidden shadow-2xl flex items-center justify-center border-2 border-fuchsia-400 aspect-[4/3] lg:aspect-auto">
+                    <video id="webcam-video" autoplay playsinline class="w-full h-full object-cover mirror"></video>
+                    <canvas id="canvas-overlay" class="absolute inset-0 w-full h-full pointer-events-none"></canvas>
+                    
+                    <!-- Butang Toggle Mod Kawalan -->
+                    <div class="absolute bottom-2 left-2 right-2 flex justify-between items-center bg-slate-900/90 px-3 py-1.5 md:py-2 rounded-xl backdrop-blur-sm z-20 text-[10px] text-white">
+                        <span id="lbl-mod-status" class="text-purple-300 truncate mr-2">💡 Jari Kanan Aktif</span>
+                        <button onclick="tukarModInteraksi()" class="bg-purple-600 hover:bg-purple-500 text-white px-2 py-1 rounded-lg font-bold cursor-pointer shrink-0">Mod AI/Sentuh</button>
+                    </div>
+
+                    <div class="absolute top-2 left-2 bg-slate-900/90 text-purple-300 text-[10px] px-2.5 py-1 rounded-full backdrop-blur-sm flex items-center gap-1 font-mono z-20">
+                        <span id="ai-status-dot" class="w-2 h-2 rounded-full bg-emerald-400"></span> <span id="ai-status-text">Mengesan Jari Kanan...</span>
+                    </div>
+                </div>
+
+                <!-- KOLUM KANAN: Kotak Soalan Interaktif -->
+                <div class="order-3 lg:order-3 bg-slate-800/80 border-2 border-fuchsia-500/40 p-3.5 md:p-4 rounded-2xl flex flex-col justify-between space-y-3">
+                    <div>
+                        <span id="soalan-nombor" class="text-[11px] md:text-xs font-bold text-fuchsia-300 uppercase font-cute tracking-wider block">Soalan 1 daripada 15</span>
+                        <h3 id="soalan-teks" class="font-cute font-bold text-white mt-1.5 md:mt-2 text-xs md:text-sm leading-snug">Apakah takrifan komunikasi mengikut istilah?</h3>
+                    </div>
+                    
+                    <div class="hidden md:block bg-slate-900/80 p-3 rounded-xl border border-fuchsia-500/30 text-[11px] text-slate-300 shadow-sm">
+                        <b>Panduan Tepat:</b> Jari emoji sentiasa terpapar bersama peratusan. Pastikan ia berada tepat di dalam kotak pilihan jawapan.
+                    </div>
+
+                    <div id="status-game" class="text-center text-[10px] md:text-[11px] text-purple-200 font-medium bg-purple-950/60 border border-purple-500/40 p-2 rounded-xl">
+                        Sistem garis laser & kotak menyala aktif.
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- STAGE 4: PAPARAN KEPUTUSAN / TAHNIAH -->
+        <div id="section-tamat" class="p-6 md:p-8 text-center space-y-4 md:space-y-5 hidden max-w-md mx-auto">
+            <div class="w-16 h-16 md:w-20 md:h-20 bg-purple-500/20 text-purple-400 rounded-full flex items-center justify-center mx-auto text-3xl md:text-4xl shadow-inner border-4 border-purple-400 animate-bounce">
+                🏆
+            </div>
+            <h2 class="text-2xl font-cute font-bold text-white">Tahniah, Hebat Sekali!</h2>
+            <p class="text-slate-300 text-xs md:text-sm">Anda telah berjaya menyelesaikan kuiz 15 Soalan Adab Berkomunikasi Pendidikan Islam Tahun 5 KSSR.</p>
+            <div class="bg-slate-800 p-4 rounded-2xl inline-block w-full border border-purple-500/40">
+                <p class="text-xs text-purple-400 font-bold uppercase font-cute">Markah Keseluruhan Anda</p>
+                <p id="keputusan-markah" class="text-3xl md:text-4xl font-extrabold text-purple-300 mt-1 font-cute">15 / 15</p>
+            </div>
+            <p id="status-sync" class="text-xs text-purple-300 font-semibold bg-purple-950 p-2.5 rounded-xl border border-purple-500/30">✅ Data nama, kelas & markah berjaya direkodkan!</p>
+            <button onclick="location.reload()" class="w-full arcade-btn text-white font-cute font-bold py-3.5 rounded-2xl cursor-pointer shadow-xl">
+                Main Semula 🔄
+            </button>
+        </div>
+
+    </div>
+
+    <script>
+        let userData = { nama: '', kelas: '', skor: 0 };
+        let soalanSemasa = 0;
+        let videoStream = null;
+        let modInteraksi = 'ai'; // 'ai' atau 'sentuh'
+        let handsInstance = null;
+        let cameraInstance = null;
+        let activeHoverBtn = null;
+        let startTimeHover = 0;
+        const requiredHoldTime = 800; // 0.8 saat stabil dalam kotak pilihan
+        
+        let cursorX = window.innerWidth / 2;
+        let cursorY = window.innerHeight / 2;
+        
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwTzaGstB26E9XKJlS4So9fqrjs7o8LHa43jiBu_xERyPoNV0G5zZnNDbN6xsPCepGxnQ/exec';
+
+        // 15 Soalan lengkap berdasarkan Buku Teks Pendidikan Islam Tahun 5 KSSR (ms 175-176)
+        const senaraiSoalan = [
+            {
+                teks: "Apakah takrifan komunikasi dari segi istilah dalam Pendidikan Islam Tahun 5?",
+                pilihan: [
+                    "Perbuatan mengadakan perhubungan sama ada secara langsung atau perantaraan",
+                    "Proses bermain permainan video secara talian",
+                    "Perbuatan bersiar-siar di pusat membeli-belah"
+                ],
+                jawapanBetul: 0
+            },
+            {
+                teks: "Apakah maksud sepotong hadis riwayat al-Bukhari: 'Al-Muslimu man salimal-muslimu...'?",
+                pilihan: [
+                    "Muslim yang suka berniaga di internet",
+                    "Muslim yang memberikan kesejahteraan kepada orang muslim yang lain dengan lidah dan tangannya",
+                    "Muslim yang tinggal di kawasan bandar"
+                ],
+                jawapanBetul: 1
+            },
+            {
+                teks: "Apakah hukum asal beradab ketika berkomunikasi menurut syarak?",
+                pilihan: [
+                    "Wajib mutlak dalam semua keadaan",
+                    "Harus, dengan syarat menjaga batas syarak",
+                    "Haram jika menggunakan telefon pintar"
+                ],
+                jawapanBetul: 1
+            },
+            {
+                teks: "Antara berikut, yang manakah merupakan adab asas ketika memulakan komunikasi?",
+                pilihan: [
+                    "Memulakan komunikasi dengan memberi salam",
+                    "Terus menengking rakan",
+                    "Meminta wang secara paksa"
+                ],
+                jawapanBetul: 0
+            },
+            {
+                teks: "Semasa bercakap dengan orang lain, kita disaran memilih perkataan yang...",
+                pilihan: [
+                    "Kesat dan kasar",
+                    "Baik, sopan dan berhemah",
+                    "Menyindir dan mengejek"
+                ],
+                jawapanBetul: 1
+            },
+            {
+                teks: "Bagaimanakah perlakuan suara yang betul ketika berkomunikasi?",
+                pilihan: [
+                    "Sopan dan lembut dalam percakapan",
+                    "Menjerit selagi boleh supaya didengari",
+                    "Berbisik sepanjang masa tanpa fasih"
+                ],
+                jawapanBetul: 0
+            },
+            {
+                teks: "Apakah sikap yang perlu diamalkan apabila mendengar orang lain sedang bercakap?",
+                pilihan: [
+                    "Mencelah terus tanpa membiarkan dia menghabiskan ayat",
+                    "Memberikan perhatian yang baik dan teliti",
+                    "Memusingkan badan ke arah lain dan tidur"
+                ],
+                jawapanBetul: 1
+            },
+            {
+                teks: "Antara berikut, yang manakah dilarang sama sekali semasa berkomunikasi?",
+                pilihan: [
+                    "Bertutur benar",
+                    "Berbohong dan memaki hamun orang lain",
+                    "Mengucapkan terima kasih"
+                ],
+                jawapanBetul: 1
+            },
+            {
+                teks: "Apakah yang perlu dilakukan apabila menerima sebarang berita melalui media sosial internet?",
+                pilihan: [
+                    "Terus sebarkan kepada semua kumpulan WhatsApp tanpa usul periksa",
+                    "Memastikan kesahihan berita terlebih dahulu (tabayyun)",
+                    "Memadamkan telefon pintar serta-merta"
+                ],
+                jawapanBetul: 1
+            },
+            {
+                teks: "Apakah ganjaran pahala bagi individu yang mengamalkan adab berkomunikasi?",
+                pilihan: [
+                    "Mendapat pahala dan reda Allah SWT",
+                    "Mendapat denda daripada guru",
+                    "Tiada sebarang ganjaran"
+                ],
+                jawapanBetul: 0
+            },
+            {
+                teks: "Mengapakah kita perlu menjauhi perbuatan mencaci dan menyakiti orang lain?",
+                pilihan: [
+                    "Kerana ia merosakkan hubungan silaturrahim",
+                    "Kerana ia disukai ramai",
+                    "Kerana ia menambah kawan baharu"
+                ],
+                jawapanBetul: 0
+            },
+            {
+                teks: "Apakah kepentingan menjaga adab ketika menggunakan media sosial?",
+                pilihan: [
+                    "Supaya kita menjadi terkenal",
+                    "Supaya selamat daripada fitnah dan salah faham",
+                    "Supaya bateri telefon tahan lebih lama"
+                ],
+                jawapanBetul: 1
+            },
+            {
+                teks: "Siapakah perawi hadis yang menyatakan tentang 'Muslim yang selamat muslim lain daripada lidah dan tangannya'?",
+                pilihan: [
+                    "Imam al-Bukhari",
+                    "Imam Malik",
+                    "Imam Abu Hanifah"
+                ],
+                jawapanBetul: 0
+            },
+            {
+                teks: "Manakah di bawah yang termasuk dalam bentuk komunikasi secara langsung?",
+                pilihan: [
+                    "Berbual bersemuka dengan kawan di kantin sekolah",
+                    "Menghantar mesej di aplikasi TikTok",
+                    "Menulis surat khabar"
+                ],
+                jawapanBetul: 0
+            },
+            {
+                teks: "Bagaimanakah ciri gurauan yang dibenarkan dalam batas syarak?",
+                pilihan: [
+                    "Bergurau secara berlebihan hingga menjatuhkan maruah kawan",
+                    "Bergurau secara sihat tanpa menipu atau menyakiti hati orang lain",
+                    "Bergurau dengan mencarut"
+                ],
+                jawapanBetul: 1
+            }
+        ];
+
+        function mulaPendaftaran() {
+            const nama = document.getElementById('input-nama').value.trim();
+            const kelas = document.getElementById('input-kelas').value.trim();
+
+            if(!nama || !kelas) {
+                paparNotaAmaran("Sila lengkapkan Nama Penuh dan Kelas anda terlebih dahulu!");
+                return;
+            }
+
+            userData.nama = nama;
+            userData.kelas = kelas;
+
+            document.getElementById('section-login').classList.add('hidden');
+            document.getElementById('section-nota').classList.remove('hidden');
+        }
+
+        function paparNotaAmaran(pesan) {
+            let alertBox = document.createElement('div');
+            alertBox.className = "fixed top-5 left-1/2 transform -translate-x-1/2 bg-purple-700 text-white font-cute px-6 py-3 rounded-2xl shadow-2xl z-50 text-xs md:text-sm animate-bounce border-2 border-purple-400";
+            alertBox.innerText = pesan;
+            document.body.appendChild(alertBox);
+            setTimeout(() => alertBox.remove(), 3000);
+        }
+
+        function mulaKameraDanGame() {
+            if(!userData.nama || !userData.kelas) {
+                userData.nama = document.getElementById('input-nama')?.value.trim() || "Pelajar";
+                userData.kelas = document.getElementById('input-kelas')?.value.trim() || "5 Dinamik";
+            }
+
+            document.getElementById('section-nota').classList.add('hidden');
+            document.getElementById('section-game').classList.remove('hidden');
+            document.getElementById('lbl-nama').innerText = userData.nama;
+            document.getElementById('lbl-jumlah-soalan').innerText = senaraiSoalan.length;
+
+            paparSoalan();
+            mulakanMediaPipeAI();
+        }
+
+        function mulakanMediaPipeAI() {
+            const videoElement = document.getElementById('webcam-video');
+            const statusDot = document.getElementById('ai-status-dot');
+            const statusText = document.getElementById('ai-status-text');
+            const lblModStatus = document.getElementById('lbl-mod-status');
+            const laserLine = document.getElementById('laser-line');
+            const cursorElement = document.getElementById('air-cursor');
+
+            navigator.mediaDevices.getUserMedia({ video: true }).then((stream) => {
+                videoStream = stream;
+                videoElement.srcObject = stream;
+            }).catch(err => {
+                console.warn("Kamera tidak dibenarkan, beralih ke mod sentuhan:", err);
+                tukarModInteraksi();
+            });
+
+            try {
+                handsInstance = new Hands({
+                    locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`
+                });
+
+                handsInstance.setOptions({
+                    maxNumHands: 2,
+                    modelComplexity: 1,
+                    minDetectionConfidence: 0.55,
+                    minTrackingConfidence: 0.55
+                });
+
+                handsInstance.onResults((results) => {
+                    if(modInteraksi !== 'ai') return;
+
+                    const gameContainer = document.querySelector('.max-w-5xl');
+                    const gameRect = gameContainer.getBoundingClientRect();
+                    
+                    const webcamContainer = document.getElementById('webcam-container');
+                    const webcamRect = webcamContainer.getBoundingClientRect();
+                    
+                    // Titik asal laser di tengah kotak kamera relatif kepada game container
+                    const startX = (webcamRect.left + (webcamRect.width / 2)) - gameRect.left;
+                    const startY = (webcamRect.top + (webcamRect.height / 2)) - gameRect.top;
+
+                    let foundRightHand = false;
+
+                    if (results.multiHandLandmarks && results.multiHandLandmarks.length > 0) {
+                        for (let i = 0; i < results.multiHandLandmarks.length; i++) {
+                            const classification = results.multiHandedness[i];
+                            // Di dalam cermin kamera (mirror), 'Left' MediaPipe bersamaan tangan kanan fizikal murid
+                            if (classification && classification.label === 'Left') {
+                                const indexFinger = results.multiHandLandmarks[i][8];
+                                cursorX = (1 - indexFinger.x) * window.innerWidth;
+                                cursorY = indexFinger.y * window.innerHeight;
+                                foundRightHand = true;
+                                break;
+                            }
+                        }
+
+                        if (!foundRightHand && results.multiHandLandmarks.length > 0) {
+                            const indexFinger = results.multiHandLandmarks[0][8];
+                            cursorX = (1 - indexFinger.x) * window.innerWidth;
+                            cursorY = indexFinger.y * window.innerHeight;
+                            foundRightHand = true;
+                        }
+                    }
+
+                    if (foundRightHand) {
+                        statusDot.className = "w-2 h-2 rounded-full bg-purple-400";
+                        statusText.innerText = "Jari Kanan Dikesan! 🖐️";
+                        lblModStatus.innerText = "✨ Tarik Jari Kanan ke kotak pilihan 1, 2 atau 3";
+                    } else {
+                        statusDot.className = "w-2 h-2 rounded-full bg-amber-400 animate-ping";
+                        statusText.innerText = "Sila angkat Jari Kanan...";
+                    }
+
+                    // Kedudukan absolut kursor emoji jari relatif kepada container utama
+                    const relativeCursorX = cursorX - gameRect.left;
+                    const relativeCursorY = cursorY - gameRect.top;
+
+                    cursorElement.style.left = relativeCursorX + 'px';
+                    cursorElement.style.top = relativeCursorY + 'px';
+                    cursorElement.style.transform = 'translate(-50%, -50%)';
+
+                    laserLine.setAttribute('x1', startX);
+                    laserLine.setAttribute('y1', startY);
+                    laserLine.setAttribute('x2', relativeCursorX);
+                    laserLine.setAttribute('y2', relativeCursorY);
+
+                    semakSentuhanKursor(cursorX, cursorY);
+                });
+
+                cameraInstance = new Camera(videoElement, {
+                    onFrame: async () => {
+                        if(modInteraksi === 'ai' && handsInstance) {
+                            await handsInstance.send({ image: videoElement });
+                        }
+                    },
+                    width: 640,
+                    height: 480
+                });
+                cameraInstance.start().catch(err => {
+                    console.warn("MediaPipe Camera ralat:", err);
+                });
+            } catch(e) {
+                console.warn("MediaPipe gagal dimuatkan, mod sentuhan skrin diaktifkan sepenuhnya.");
+            }
+        }
+
+        function semakSentuhanKursor(x, y) {
+            const btnElements = document.querySelectorAll('.btn-pilihan');
+            const cursorProgress = document.getElementById('cursor-progress');
+
+            let hoveredBtn = null;
+            btnElements.forEach(btn => {
+                const btnRect = btn.getBoundingClientRect();
+                // Toleransi luas agar mudah dikesan murid
+                const tolerance = 25;
+                if (
+                    x >= (btnRect.left - tolerance) &&
+                    x <= (btnRect.right + tolerance) &&
+                    y >= (btnRect.top - tolerance) &&
+                    y <= (btnRect.bottom + tolerance)
+                ) {
+                    hoveredBtn = btn;
+                }
+            });
+
+            if (hoveredBtn) {
+                if (activeHoverBtn !== hoveredBtn) {
+                    resetSemuaKotak();
+                    activeHoverBtn = hoveredBtn;
+                    startTimeHover = Date.now();
+                    hoveredBtn.classList.add('active-target');
+                } else {
+                    let elapsedTime = Date.now() - startTimeHover;
+                    let progressPercent = Math.min(100, Math.floor((elapsedTime / requiredHoldTime) * 100));
+                    cursorProgress.innerText = `${progressPercent}%`;
+
+                    if (elapsedTime >= requiredHoldTime) {
+                        hoveredBtn.click();
+                        resetSemuaKotak();
+                    }
+                }
+            } else {
+                if (activeHoverBtn) {
+                    const activeRect = activeHoverBtn.getBoundingClientRect();
+                    const safetyMargin = 50;
+                    if (
+                        x >= activeRect.left - safetyMargin &&
+                        x <= activeRect.right + safetyMargin &&
+                        y >= activeRect.top - safetyMargin &&
+                        y <= activeRect.bottom + safetyMargin
+                    ) {
+                        return;
+                    }
+                }
+                resetSemuaKotak();
+            }
+        }
+
+        function resetSemuaKotak() {
+            document.querySelectorAll('.btn-pilihan').forEach(btn => {
+                btn.classList.remove('active-target');
+            });
+            activeHoverBtn = null;
+            const cursorProgress = document.getElementById('cursor-progress');
+            if (cursorProgress) cursorProgress.innerText = "0%";
+            startTimeHover = 0;
+        }
+
+        function tukarModInteraksi() {
+            const lbl = document.getElementById('lbl-mod-status');
+            const laserLine = document.getElementById('laser-line');
+            if(modInteraksi === 'ai') {
+                modInteraksi = 'sentuh';
+                lbl.innerText = "👆 Mod Sentuhan Terus Aktif";
+                laserLine.classList.add('hidden');
+                document.getElementById('ai-status-text').innerText = "Mod Sentuhan Biasa";
+                resetSemuaKotak();
+            } else {
+                modInteraksi = 'ai';
+                lbl.innerText = "💡 Jari Kanan Aktif";
+                laserLine.classList.remove('hidden');
+                document.getElementById('ai-status-text').innerText = "Mengesan Jari Kanan...";
+            }
+        }
+
+        function paparSoalan() {
+            resetSemuaKotak();
+            if(soalanSemasa >= senaraiSoalan.length) {
+                tamatGame();
+                return;
+            }
+
+            const s = senaraiSoalan[soalanSemasa];
+            document.getElementById('soalan-nombor').innerText = `Soalan ${soalanSemasa + 1} daripada ${senaraiSoalan.length}`;
+            document.getElementById('soalan-teks').innerText = s.teks;
+
+            const pilihanContainer = document.getElementById('pilihan-jawapan');
+            pilihanContainer.innerHTML = '';
+
+            s.pilihan.forEach((pilih, index) => {
+                const btn = document.createElement('button');
+                btn.className = "btn-pilihan w-full text-left p-3 md:p-4 rounded-xl border-2 border-purple-500/50 font-medium text-xs md:text-sm transition bg-slate-900/95 shadow-lg flex items-center justify-between group transform duration-200 cursor-pointer text-slate-100 relative z-20";
+                btn.innerHTML = `<span>${pilih}</span> <span class="text-[9px] md:text-[10px] bg-purple-600 text-white font-cute px-2.5 py-1 rounded-lg shrink-0 ml-2 shadow">Pilihan ${index + 1}</span>`;
+                btn.onclick = () => {
+                    resetSemuaKotak();
+                    semakJawapan(index);
+                };
+                pilihanContainer.appendChild(btn);
+            });
+        }
+
+        function semakJawapan(pilihanIndeks) {
+            const s = senaraiSoalan[soalanSemasa];
+            if(pilihanIndeks === s.jawapanBetul) {
+                userData.skor++;
+                document.getElementById('lbl-skor').innerText = userData.skor;
+                paparNotaAmaran("🌟 Tahniah! Jawapan Betul.");
+            } else {
+                paparNotaAmaran("❌ Kurang tepat. Teruskan usaha!");
+            }
+
+            soalanSemasa++;
+            paparSoalan();
+        }
+
+        function tamatGame() {
+            resetSemuaKotak();
+            if (cameraInstance) {
+                cameraInstance.stop();
+            }
+            if (videoStream) {
+                videoStream.getTracks().forEach(track => track.stop());
+            }
+
+            document.getElementById('section-game').classList.add('hidden');
+            document.getElementById('section-tamat').classList.remove('hidden');
+            document.getElementById('keputusan-markah').innerText = `${userData.skor} / ${senaraiSoalan.length}`;
+
+            const dataPayload = {
+                nama: userData.nama,
+                kelas: userData.kelas,
+                skor: userData.skor,
+                masa: new Date().toISOString()
+            };
+
+            fetch(GOOGLE_SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(dataPayload)
+            }).then(() => {
+                console.log("Data berjaya direkodkan.");
+            }).catch(err => {
+                console.log("Mod luar talian aktif.");
+            });
+        }
+    </script>
+</body>
+</html>

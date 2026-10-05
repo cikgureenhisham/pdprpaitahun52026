@@ -32,7 +32,7 @@
             background: rgba(147, 51, 234, 0.95) !important;
             border-color: #f3e8ff !important;
             box-shadow: 0 0 25px rgba(216, 180, 254, 0.9);
-            transform: scale(1.06);
+            transform: scale(1.04);
         }
     </style>
 </head>
@@ -64,7 +64,7 @@
 
                 <div>
                     <label class="block text-purple-300 font-cute font-semibold mb-1.5 text-xs md:text-sm">Kelas:</label>
-                    <input type="text" id="input-kelas" placeholder="Contoh: 5 AL-BIRUNI" oninput="this.value = this.value.toUpperCase()" class="w-full px-4 py-3 md:py-3.5 rounded-2xl bg-slate-800 border-2 border-purple-500/40 focus:ring-4 focus:ring-purple-400/30 focus:border-purple-400 focus:outline-none text-white placeholder-slate-500 transition text-sm font-medium uppercase">
+                    <input type="text" id="input-kelas" placeholder="Contoh: 5 SUNFLOWER atau 5 TULIP" oninput="this.value = this.value.toUpperCase()" class="w-full px-4 py-3 md:py-3.5 rounded-2xl bg-slate-800 border-2 border-purple-500/40 focus:ring-4 focus:ring-purple-400/30 focus:border-purple-400 focus:outline-none text-white placeholder-slate-500 transition text-sm font-medium uppercase">
                 </div>
             </div>
 
@@ -143,21 +143,24 @@
                     <button onclick="tukarModInteraksi()" class="bg-purple-600 hover:bg-purple-500 text-white px-2.5 py-1 rounded-xl font-bold text-[10px] cursor-pointer">Mod AI/Sentuh</button>
                 </div>
 
-                <!-- Kotak Soalan Utama di Atas (Saiz Teks Dioptimumkan Elak Terpotong) -->
-                <div class="bg-slate-900/90 backdrop-blur-md border-2 border-fuchsia-500/70 p-3 md:p-3.5 rounded-2xl shadow-2xl text-center">
-                    <span id="soalan-nombor" class="text-[11px] font-bold text-fuchsia-300 uppercase font-cute tracking-wider block mb-1">Soalan 1 daripada 15</span>
-                    <h3 id="soalan-teks" class="font-cute font-bold text-white text-xs sm:text-sm md:text-base leading-snug drop-shadow">Apakah takrifan komunikasi mengikut istilah?</h3>
+                <!-- Kotak Soalan Utama di Atas -->
+                <div class="bg-slate-900/90 backdrop-blur-md border-2 border-fuchsia-500/70 p-3 md:p-3.5 rounded-2xl shadow-2xl">
+                    <div class="flex justify-between items-center mb-1">
+                        <span id="soalan-nombor" class="text-[11px] font-bold text-fuchsia-300 uppercase font-cute tracking-wider">Soalan 1 daripada 15</span>
+                        <span id="soalan-aras" class="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-500/20 border border-emerald-400 text-emerald-300 uppercase">Aras Rendah</span>
+                    </div>
+                    <h3 id="soalan-teks" class="font-cute font-bold text-white text-xs sm:text-sm md:text-base leading-snug drop-shadow text-center">Apakah takrifan komunikasi mengikut istilah?</h3>
                 </div>
             </div>
 
-            <!-- LAYER BAWAH: Pilihan Jawapan Melintang (Sama Saiz Kotak, Saiz Font Automatik Mengikut Panjang) -->
+            <!-- LAYER BAWAH: Pilihan Jawapan Melintang (Horizontal dari Kanan ke Kiri) -->
             <div class="relative z-20 p-3 md:p-4 bg-gradient-to-t from-slate-950 via-slate-900/85 to-transparent pt-4">
                 <div class="text-center mb-2">
                     <span class="text-[11px] md:text-xs font-bold text-purple-300 font-cute uppercase tracking-wide bg-purple-950/80 px-3 py-1 rounded-full border border-purple-500/40">✨ Tarik jari kanan anda ke pilihan jawapan di bawah</span>
                 </div>
-                <!-- Flex row melintang: saiz tinggi dan lebar seragam (h-[120px] md:h-[135px]) -->
+                <!-- Flex row melintang dari kiri ke kanan -->
                 <div id="pilihan-jawapan" class="flex flex-row gap-2 md:gap-3 justify-center items-stretch w-full">
-                    <!-- Pilihan jawapan dijana secara dinamik -->
+                    <!-- Pilihan jawapan dijana secara dinamik dengan saiz font bersesuaian -->
                 </div>
             </div>
         </div>
@@ -168,7 +171,7 @@
                 🏆
             </div>
             <h2 class="text-2xl font-cute font-bold text-white">Tahniah, Hebat Sekali!</h2>
-            <p class="text-slate-300 text-xs md:text-sm">Anda telah berjaya menyelesaikan kuiz 15 Soalan Adab Berkomunikasi Pendidikan Islam Tahun 5 KSSR.</p>
+            <p class="text-slate-300 text-xs md:text-sm">Anda telah berjaya menyelesaikan kuiz 15 Soalan Aras Berperingkat Adab Berkomunikasi Tahun 5 KSSR.</p>
             <div class="bg-slate-800 p-4 rounded-2xl inline-block w-full border border-purple-500/40">
                 <p class="text-xs text-purple-400 font-bold uppercase font-cute">Markah Keseluruhan Anda</p>
                 <p id="keputusan-markah" class="text-3xl md:text-4xl font-extrabold text-purple-300 mt-1 font-cute">15 / 15</p>
@@ -184,22 +187,158 @@
     <script>
         const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzV.../exec';
 
-        const senaraiSoalan = [
-            { teks: "Apakah maksud komunikasi mengikut istilah?", pilihan: ["Perbuatan mengadakan perhubungan secara langsung atau melalui perantaraan", "Perbuatan bercakap-cakap seorang diri", "Perbuatan menulis nota di dalam buku teks"], jawapanBetul: 0 },
-            { teks: "Apakah maksud hadis riwayat al-Bukhari tentang muslim sebenar?", pilihan: ["Memberikan kesejahteraan kepada orang lain dengan lidah dan tangan", "Berdiam diri daripada berkata-kata", "Menjauhi daripada majlis ilmu"], jawapanBetul: 0 },
-            { teks: "Apakah hukum asal beradab ketika berkomunikasi?", pilihan: ["Harus (dengan syarat menjaga batas syarak)", "Wajib kifayah", "Haram mutlak"], jawapanBetul: 0 },
-            { teks: "Antara berikut, yang manakah DILARANG semasa berkomunikasi?", pilihan: ["Berbohong, memfitnah & memaki hamun", "Bertutur kata dengan sopan dan benar", "Mendengar pesanan dengan teliti"], jawapanBetul: 0 },
-            { teks: "Apakah ganjaran bagi individu yang mengamalkan adab berkomunikasi?", pilihan: ["Mendapat pahala & reda Allah SWT", "Mendapat kemegahan dunia", "Tiada sebarang ganjaran"], jawapanBetul: 0 },
-            { teks: "Bagaimanakah cara memulakan komunikasi yang baik menurut Islam?", pilihan: ["Memulakan dengan salam", "Terus menerpa tanpa kata", "Memanggil nama dengan gelaran buruk"], jawapanBetul: 0 },
-            { teks: "Mengapakah kita perlu mengelakkan perbuatan berbohong?", pilihan: ["Kerana ia merosakkan kepercayaan & silaturrahim", "Kerana ia menjimatkan masa", "Kerana ia disukai rakan"], jawapanBetul: 0 },
-            { teks: "Antara berikut, manakah dilarang semasa berkomunikasi?", pilihan: ["Bergurau secara berlebihan hingga mengaibkan kawan", "Bertanya khabar kesihatan guru", "Menyampaikan maklumat yang sahih"], jawapanBetul: 0 },
-            { teks: "Apakah kesan positif menjaga adab komunikasi terhadap masyarakat?", pilihan: ["Merapatkan perpaduan & harmoni", "Mewujudkan persengketaan", "Menimbulkan pergaduhan"], jawapanBetul: 0 },
-            { teks: "Bagaimanakah adab ketika menggunakan media sosial?", pilihan: ["Memastikan kesahihan berita sebelum menyebarkan", "Menyebarkan sebarang berita sensasi", "Memaki hamun di ruangan komen"], jawapanBetul: 0 },
-            { teks: "Apakah sikap yang perlu ada ketika rakan sedang bercakap?", pilihan: ["Memberikan perhatian & tidak mencelah", "Berpaling muka & sibuk telefon", "Tertawa mengejek"], jawapanBetul: 0 },
-            { teks: "Mengapakah kita dilarang memanggil rakan dengan gelaran buruk?", pilihan: ["Kerana ia menyinggung perasaan & dilarang agama", "Kerana ia melatih minda", "Kerana ia mengeratkan hubungan"], jawapanBetul: 0 },
-            { teks: "Apakah akibat buruk menyebar berita palsu (fitnah) di media sosial?", pilihan: ["Mencetuskan huru-hara & kebencian", "Mendapat pujian ramai", "Meningkatkan pahala"], jawapanBetul: 0 },
-            { teks: "Manakah yang termasuk dalam bentuk komunikasi secara langsung?", pilihan: ["Berbual bersemuka dengan kawan di kantin sekolah", "Menghantar mesej di aplikasi TikTok", "Menulis surat khabar"], jawapanBetul: 0 },
-            { teks: "Apakah kesimpulan utama tajuk Adab Berkomunikasi Tahun 5?", pilihan: ["Komunikasi beradab melahirkan insan mulia & disayangi", "Komunikasi bebas tanpa had syarak", "Bercakap sesuka hati tanpa batasan"], jawapanBetul: 0 }
+        // 15 Soalan KSSR Tahun 5 Berperingkat (Aras Rendah, Sederhana, Tinggi / KBAT)
+        const senaraiSoalanMaster = [
+            // ARAS RENDAH (Asas & Ingatan)
+            { 
+                aras: "Aras Rendah", 
+                warnaAras: "bg-emerald-500/20 border-emerald-400 text-emerald-300",
+                teks: "Apakah pengertian komunikasi mengikut istilah berdasarkan buku teks?", 
+                pilihanAsal: [
+                    "Perbuatan mengadakan perhubungan, sama ada secara langsung atau melalui perantaraan", 
+                    "Perbuatan bercakap-cakap seorang diri di dalam bilik", 
+                    "Perbuatan menulis nota pelajaran di dalam buku"
+                ], 
+                jawapanBetulTeks: "Perbuatan mengadakan perhubungan, sama ada secara langsung atau melalui perantaraan" 
+            },
+            { 
+                aras: "Aras Rendah", 
+                warnaAras: "bg-emerald-500/20 border-emerald-400 text-emerald-300",
+                teks: "Apakah hukum asal mengamalkan adab ketika berkomunikasi?", 
+                pilihanAsal: ["Harus", "Wajib", "Haram"], 
+                jawapanBetulTeks: "Harus" 
+            },
+            { 
+                aras: "Aras Rendah", 
+                warnaAras: "bg-emerald-500/20 border-emerald-400 text-emerald-300",
+                teks: "Bagaimanakah cara memulakan komunikasi yang baik menurut Islam?", 
+                pilihanAsal: ["Memulakan dengan salam", "Terus menerpa tanpa kata", "Memanggil dengan gelaran"], 
+                jawapanBetulTeks: "Memulakan dengan salam" 
+            },
+            { 
+                aras: "Aras Rendah", 
+                warnaAras: "bg-emerald-500/20 border-emerald-400 text-emerald-300",
+                teks: "Manakah yang termasuk dalam bentuk komunikasi secara langsung?", 
+                pilihanAsal: ["Berbual bersemuka di kantin", "Menghantar mesej TikTok", "Menulis surat khabar"], 
+                jawapanBetulTeks: "Berbual bersemuka di kantin" 
+            },
+            { 
+                aras: "Aras Rendah", 
+                warnaAras: "bg-emerald-500/20 border-emerald-400 text-emerald-300",
+                teks: "Apakah maksud potongan hadis '«الْمُسْلِمُ مَنْ سَلِمَ الْمُسْلِمُونَ مِنْ لِسَانِهِ وَيَدِهِ»?", 
+                pilihanAsal: [
+                    "Muslim selamat dari lidah & kakinya", 
+                    "Muslim itu yang memberi kesejahteraan orang lain dari lidah dan tangannya", 
+                    "Muslim Muslim itu yang memberi kesejahteraan orang lain"
+                ], 
+                jawapanBetulTeks: "Muslim itu yang memberi kesejahteraan orang lain dari lidah dan tangannya" 
+            },
+
+            // ARAS SEDERHANA (Kefahaman & Aplikasi)
+            { 
+                aras: "Aras Sederhana", 
+                warnaAras: "bg-amber-500/20 border-amber-400 text-amber-300",
+                teks: "Antara berikut, yang manakah ADAB yang betul semasa kawan sedang bercakap?", 
+                pilihanAsal: [
+                    "Memberikan perhatian & tidak mencelah", 
+                    "Berpaling muka & sibuk telefon", 
+                    "Tertawa mengejek cerita kawan"
+                ], 
+                jawapanBetulTeks: "Memberikan perhatian & tidak mencelah" 
+            },
+            { 
+                aras: "Aras Sederhana", 
+                warnaAras: "bg-amber-500/20 border-amber-400 text-amber-300",
+                teks: "Mengapakah kita perlu mengelakkan perbuatan berbohong semasa berkomunikasi?", 
+                pilihanAsal: [
+                    "Kerana ia merosakkan kepercayaan & silaturrahim", 
+                    "Kerana ia menjimatkan masa belajar", 
+                    "Kerana ia disukai rakan sekelas"
+                ], 
+                jawapanBetulTeks: "Kerana ia merosakkan kepercayaan & silaturrahim" 
+            },
+            { 
+                aras: "Aras Sederhana", 
+                warnaAras: "bg-amber-500/20 border-amber-400 text-amber-300",
+                teks: "Apakah kepentingan menjaga adab ketika berkomunikasi terhadap individu?", 
+                pilihanAsal: ["Mendapat pahala & reda Allah", "Mendapat kemegahan dunia", "Tiada sebarang ganjaran"], 
+                jawapanBetulTeks: "Mendapat pahala & reda Allah" 
+            },
+            { 
+                aras: "Aras Sederhana", 
+                warnaAras: "bg-amber-500/20 border-amber-400 text-amber-300",
+                teks: "Bagaimanakah bentuk komunikasi yang beradab apabila menggunakan media sosial?", 
+                pilihanAsal: [
+                    "Memastikan kesahihan berita sebelum menyebarkan", 
+                    "Menyebarkan berita sensasi", 
+                    "Memaki hamun di ruangan komen"
+                ], 
+                jawapanBetulTeks: "Memastikan kesahihan berita sebelum menyebarkan" 
+            },
+            { 
+                aras: "Aras Sederhana", 
+                warnaAras: "bg-amber-500/20 border-amber-400 text-amber-300",
+                teks: "Apakah kesan positif menjaga adab komunikasi terhadap masyarakat?", 
+                pilihanAsal: ["Merapatkan perpaduan & harmoni", "Mewujudkan persengketaan", "Menimbulkan pergaduhan"], 
+                jawapanBetulTeks: "Merapatkan perpaduan & harmoni" 
+            },
+
+            // ARAS TINGGI / KBAT (Analisis & Penilaian)
+            { 
+                aras: "Aras Tinggi (KBAT)", 
+                warnaAras: "bg-rose-500/20 border-rose-400 text-rose-300",
+                teks: "Amirul melihat rakan sekelasnya menyebarkan mesej fitnah di WhatsApp group kelas. Apakah tindakan paling tepat bagi Amirul?", 
+                pilihanAsal: [
+                    "Menasihati rakan supaya berhenti & melaporkan kepada guru", 
+                    "Turut menyebarkan mesej itu kepada kumpulan lain", 
+                    "Berdiam diri kerana tiada kaitan dengannya"
+                ], 
+                jawapanBetulTeks: "Menasihati rakan supaya berhenti & melaporkan kepada guru" 
+            },
+            { 
+                aras: "Aras Tinggi (KBAT)", 
+                warnaAras: "bg-rose-500/20 border-rose-400 text-rose-300",
+                teks: "Mengapakah Islam melarang keras perbuatan bergurau secara berlebihan hingga mengaibkan sahabat?", 
+                pilihanAsal: [
+                    "Kerana ia boleh memecahbelahkan perpaduan & menyinggung perasaan", 
+                    "Kerana ia melatih minda menjadi lebih cerdas", 
+                    "Kerana ia mengeratkan lagi hubungan silaturrahim"
+                ], 
+                jawapanBetulTeks: "Kerana ia boleh memecahbelahkan perpaduan & menyinggung perasaan" 
+            },
+            { 
+                aras: "Aras Tinggi (KBAT)", 
+                warnaAras: "bg-rose-500/20 border-rose-400 text-rose-300",
+                teks: "Apakah akibat buruk jika seseorang kerap menggunakan lidahnya untuk mencaci dan memfitnah di media sosial?", 
+                pilihanAsal: [
+                    "Hilang kepercayaan masyarakat & mengundang kemurkaan Allah", 
+                    "Dipuji ramai kerana berani berkata benar", 
+                    "Meningkatkan pahala amalan harian"
+                ], 
+                jawapanBetulTeks: "Hilang kepercayaan masyarakat & mengundang kemurkaan Allah" 
+            },
+            { 
+                aras: "Aras Tinggi (KBAT)", 
+                warnaAras: "bg-rose-500/20 border-rose-400 text-rose-300",
+                teks: "Manakah situasi yang menunjukkan seseorang itu gagal mengawal 'tangan dan lidah' ketika melayari internet?", 
+                pilihanAsal: [
+                    "Menulis komen kesat di hantaran media sosial orang lain", 
+                    "Membaca buku teks Pendidikan Islam secara online", 
+                    "Menghantar mesej tahniah kepada rakan kelas"
+                ], 
+                jawapanBetulTeks: "Menulis komen kesat di hantaran media sosial orang lain" 
+            },
+            { 
+                aras: "Aras Tinggi (KBAT)", 
+                warnaAras: "bg-rose-500/20 border-rose-400 text-rose-300",
+                teks: "Apakah kesimpulan utama apabila kita mengaitkan hadis al-Bukhari dengan kehidupan era digital masa kini?", 
+                pilihanAsal: [
+                    "Keselamatan sesama manusia perlu dijaga bukan sahaja di alam nyata, malah di media sosial", 
+                    "Media sosial bebas digunakan tanpa perlu mengikut sebarang batas agama", 
+                    "Penggunaan gajet moden dilarang sama sekali dalam Islam"
+                ], 
+                jawapanBetulTeks: "Keselamatan sesama manusia perlu dijaga bukan sahaja di alam nyata, malah di media sosial" 
+            }
         ];
 
         let userData = { nama: '', kelas: '', skor: 0 };
@@ -214,6 +353,10 @@
         
         let cursorX = window.innerWidth / 2;
         let cursorY = window.innerHeight / 2;
+
+        // Pembolehubah untuk soalan & pilihan yang telah di-shuffle
+        let soalanSemasaPilihanShuffled = [];
+        let indexJawapanBetulShuffled = 0;
 
         function mulaPendaftaran() {
             const nama = document.getElementById('input-nama').value.trim();
@@ -238,6 +381,16 @@
 
             paparSoalan();
             mulakanMediaPipeHands();
+        }
+
+        // Fungsi utiliti untuk mengacak (shuffle) susunan array pilihan jawapan
+        function shuffleArray(array) {
+            let arr = [...array];
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
         }
 
         function mulakanMediaPipeHands() {
@@ -391,14 +544,13 @@
             sedangJedaSoalan = true;
             resetSemuaKotak();
 
-            const s = senaraiSoalan[soalanSemasa];
             let statusMesej = "";
-            if(pilihanIndeks === s.jawapanBetul) {
+            if(pilihanIndeks === indexJawapanBetulShuffled) {
                 userData.skor++;
                 document.getElementById('lbl-skor').innerText = userData.skor;
-                statusMesej = "🌟 Tahniah! Jawapan Betul!";
+                statusMesej = "🌟 Tahniah! Jawapan Betul! (+1)";
             } else {
-                statusMesej = "❌ Kurang tepat. Jawapan betul ialah Pilihan " + (s.jawapanBetul + 1);
+                statusMesej = "❌ Kurang tepat. Jawapan betul ialah Pilihan " + (indexJawapanBetulShuffled + 1);
             }
 
             paparSkrinJeda(statusMesej, () => {
@@ -427,20 +579,30 @@
 
         function paparSoalan() {
             resetSemuaKotak();
-            if(soalanSemasa >= senaraiSoalan.length) {
+            if(soalanSemasa >= senaraiSoalanMaster.length) {
                 tamatGame();
                 return;
             }
 
-            const s = senaraiSoalan[soalanSemasa];
-            document.getElementById('soalan-nombor').innerText = `Soalan ${soalanSemasa + 1} daripada ${senaraiSoalan.length}`;
+            const s = senaraiSoalanMaster[soalanSemasa];
+            document.getElementById('soalan-nombor').innerText = `Soalan ${soalanSemasa + 1} daripada ${senaraiSoalanMaster.length}`;
+            
+            const badgeAras = document.getElementById('soalan-aras');
+            badgeAras.innerText = s.aras;
+            badgeAras.className = `text-[10px] font-bold px-2.5 py-0.5 rounded-full border uppercase ${s.warnaAras}`;
+
             document.getElementById('soalan-teks').innerText = s.teks;
+
+            // ACAK (SHUFFLE) PILIHAN JAWAPAN SETIAP KALI SOALAN DIPAPAR
+            soalanSemasaPilihanShuffled = shuffleArray(s.pilihanAsal);
+            // Cari kedudukan indeks baharu bagi jawapan yang betul
+            indexJawapanBetulShuffled = soalanSemasaPilihanShuffled.indexOf(s.jawapanBetulTeks);
 
             const pilihanContainer = document.getElementById('pilihan-jawapan');
             pilihanContainer.innerHTML = '';
 
-            s.pilihan.forEach((pilih, index) => {
-                // Tentukan saiz font secara dinamik berdasarkan panjang teks supaya tak terpotong
+            soalanSemasaPilihanShuffled.forEach((pilih, index) => {
+                // Saiz font dinamik mengikut panjang ayat pilihan
                 let fontSizeClass = "text-xs md:text-sm";
                 if (pilih.length > 70) {
                     fontSizeClass = "text-[10px] md:text-xs leading-tight";
@@ -449,7 +611,7 @@
                 }
 
                 const btn = document.createElement('button');
-                // Kotak seragam saiz tinggi (h-[120px] md:h-[135px]) dan fleksibel mendatar supaya sama besar
+                // Kotak seragam saiz tinggi melintang dari kiri ke kanan
                 btn.className = "btn-pilihan flex-1 h-[125px] md:h-[140px] p-2.5 md:p-3.5 rounded-2xl border-2 border-purple-500/60 font-semibold transition bg-slate-900/95 shadow-xl flex flex-col items-center justify-between text-center cursor-pointer text-slate-100 relative z-20 backdrop-blur-md hover:bg-purple-900/80 overflow-hidden";
                 btn.innerHTML = `
                     <span class="text-[10px] md:text-[11px] bg-purple-600/80 text-purple-200 font-cute px-2.5 py-0.5 rounded-full border border-purple-400/40 font-bold shrink-0">Pilihan ${index + 1}</span>
@@ -477,7 +639,7 @@
         function tamatGame() {
             document.getElementById('section-game').classList.add('hidden');
             document.getElementById('section-tamat').classList.remove('hidden');
-            document.getElementById('keputusan-markah').innerText = `${userData.skor} / ${senaraiSoalan.length}`;
+            document.getElementById('keputusan-markah').innerText = `${userData.skor} / ${senaraiSoalanMaster.length}`;
 
             if(GOOGLE_SCRIPT_URL && GOOGLE_SCRIPT_URL.includes('https://script.google.com')) {
                 fetch(GOOGLE_SCRIPT_URL, {
@@ -488,13 +650,13 @@
                         masa: new Date().toLocaleString(),
                         nama: userData.nama,
                         kelas: userData.kelas,
-                        skor: `${userData.skor} / ${senaraiSoalan.length}`
+                        skor: `${userData.skor} / ${senaraiSoalanMaster.length}`
                     })
                 }).then(() => {
-                    document.getElementById('status-sync').innerText = "✅ Rekod markah berjaya dihantar kepada Guru!";
+                    document.getElementById('status-sync').innerText = "✅ Rekod markah berjaya dihantar ke Google Sheets!";
                 }).catch(err => {
                     console.error("Gagal hantar ke Sheets:", err);
-                    document.getElementById('status-sync').innerText = "⚠️ Gagal sambungan (Mod Luar Talian)";
+                    document.getElementById('status-sync').innerText = "⚠️ Gagal sambung ke Google Sheets (Mod Luar Talian)";
                 });
             }
         }

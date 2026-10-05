@@ -229,7 +229,7 @@
                 pilihanAsal: [
                     "Muslim selamat dari lidah & kakinya", 
                     "Muslim itu yang memberi kesejahteraan orang lain dari lidah dan tangannya", 
-                    "Muslim Muslim itu yang memberi kesejahteraan orang lain"
+                    "Muslim itu yang memberi kesejahteraan orang lain"
                 ], 
                 jawapanBetulTeks: "Muslim itu yang memberi kesejahteraan orang lain dari lidah dan tangannya" 
             },
@@ -653,10 +653,10 @@
                         skor: `${userData.skor} / ${senaraiSoalanMaster.length}`
                     })
                 }).then(() => {
-                    document.getElementById('status-sync').innerText = "✅ Rekod markah berjaya dihantar ke Google Sheets!";
+                    document.getElementById('status-sync').innerText = "✅ Rekod markah berjaya dihantar!";
                 }).catch(err => {
                     console.error("Gagal hantar ke Sheets:", err);
-                    document.getElementById('status-sync').innerText = "⚠️ Gagal sambung ke Google Sheets (Mod Luar Talian)";
+                    document.getElementById('status-sync').innerText = "⚠️ Gagal (Mod Luar Talian)";
                 });
             }
         }
